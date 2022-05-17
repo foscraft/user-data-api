@@ -41,8 +41,17 @@ def get_users():
 
 @app.route('/users/<id>',methods=['GET'])
 def get_user_by_id(id):
-    user_details = User.query.filter_by(id=id)
-    return {'details': user_details},200
+    user = User.query.get(id)
+    if not user:
+        return abort(404)
+    user_data = {
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+        "username": user.username,
+        "bio": user.bio,                            
+    }
+    return {"user": user_data}, 200
 
 @app.route('/login',methods=['POST'])
 def login():
@@ -60,4 +69,24 @@ def login():
             return ('Username or Password Incorrect')
     return ('user does not have an account')
 
-    
+
+@app.route('/logout',methods=['GET'])
+def logout():
+    session.pop('logged_in', None)
+    session.pop('email', None)
+    session.pop('username', None)
+    return ('You are logged out')
+
+@app.route('/users/update/<id>',methods=['PUT'])
+def update_user(id):
+    data = request.json
+    user = User.query.filter_by(id=id).first()
+    if user:
+        user.first_name = data.get("first_name")
+        user.last_name = data.get("last_name")
+        user.username = data.get("username")
+        user.bio = data.get("bio")
+        db.session.commit()
+        return {'message': 'User updated'},200
+    return {'message': 'User not found'},404
+
