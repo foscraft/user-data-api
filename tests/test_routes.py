@@ -89,16 +89,17 @@ def test_update_user_by_id(client):
 
     assert response.status_code == 201
     user_id = response.json["user"]["id"]
-    
+
     updated_data = {
         "first_name": fake.first_name(),
         "last_name": fake.last_name(),
         "bio": fake.text(),
     }
 
-
     response = client.put(
-        f"/api/v1/users/{user_id}", data=json.dumps(updated_data), content_type="application/json"
+        f"/api/v1/users/{user_id}",
+        data=json.dumps(updated_data),
+        content_type="application/json",
     )
 
     assert response.status_code == 200
@@ -122,7 +123,6 @@ def test_get_user_by_id(client):
         "bio": fake.text(),
         "password": fake.password(),
     }
-    
 
     response = client.post(
         "/api/v1/register", data=json.dumps(data), content_type="application/json"
@@ -137,5 +137,5 @@ def test_get_user_by_id(client):
 
 def test_get_user_by_id_not_found(client):
     response = client.get("/api/v1/users/100")
-    
+
     assert response.status_code == 404
