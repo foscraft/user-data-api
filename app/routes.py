@@ -8,7 +8,7 @@ from app import app, db
 from app.models import User
 
 
-@app.route("/register", methods=["POST"])
+@app.route("/api/v1/register", methods=["POST"])
 def register():
     data = request.json
 
@@ -24,10 +24,19 @@ def register():
     )
     db.session.add(user)
     db.session.commit()
-    return {"message": "User created"}, 201
+    return {
+        "user": {
+            "id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "username": user.username,
+            "bio": user.bio,
+            "email": user.email,
+        }
+    }, 201
 
 
-@app.route("/users", methods=["GET"])
+@app.route("/api/v1/users", methods=["GET"])
 def get_users():
     db_users = User.query.all()
     users = []
@@ -44,7 +53,7 @@ def get_users():
     return {"users": users}, 200
 
 
-@app.route("/users/<id>", methods=["GET"])
+@app.route("/api/v1/users/<id>", methods=["GET"])
 def get_user_by_id(id):
     user = User.query.get(id)
     if not user:
@@ -59,7 +68,7 @@ def get_user_by_id(id):
     return {"user": user_data}, 200
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/v1/login", methods=["POST"])
 def login():
     data = request.json
     password = data.get("password")
@@ -70,24 +79,26 @@ def login():
             session["logged_in"] = True
             session["email"] = user.email
             session["username"] = user.username
-            return f"You are logged in as {user.username}", 200
+            return {"message": f"You are logged in as {user.username}"}, 200
         else:
-            return "Username or Password Incorrect"
-    return "user does not have an account"
+            return {"message": "Username or Password Incorrect"}, 400
+    return {"message": "user does not have an account"}, 404
 
 
-@app.route("/logout", methods=["GET"])
+@app.route("/api/v1/logout", methods=["GET"])
 def logout():
     session.pop("logged_in", None)
     session.pop("email", None)
     session.pop("username", None)
-    return "You are logged out"
+    return {"message": "You are logged out"}, 200
 
 
-@app.route("/users/update/<id>", methods=["PUT"])
-def update_user(id):
+@app.route("/api/v1/users/<int:user_id>", methods=["PUT"])
+def update_user(user_id):
     data = request.json
-    user = User.query.filter_by(id=id).first()
+   
+    user = User.query.filter_by(id=user_id).first()
+
     if user:
         user.first_name = data.get("first_name")
         user.last_name = data.get("last_name")
