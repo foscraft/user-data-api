@@ -1,6 +1,6 @@
+from decouple import config
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from decouple import config
 
 app = Flask(__name__)
 

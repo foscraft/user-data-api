@@ -1,18 +1,24 @@
 import os
+
 from decouple import config
 
+
 class Config:
-    DEBUG=False
-    TESTING=False
+    DEBUG = False
+    TESTING = False
     SECRET_KEY = config("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = config("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+
 class DevelopmentConfig(Config):
-    DEBUG=True
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = config("DATABASE_URL")
+
 
 class ProductionConfig(Config):
     ...
 
+
 class TestingConfig(Config):
-    TESTING=True
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = "sqlite://"
