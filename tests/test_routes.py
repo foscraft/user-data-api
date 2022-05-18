@@ -58,14 +58,27 @@ def test_login(client):
     assert response.status_code == 201
     assert response.json["message"] == "User created"
 
-    data = {
+    logins = {
         "username": data["username"],
         "password": data["password"],
     }
 
     response = client.post(
-        "/login", data=json.dumps(data), content_type="application/json"
+        "/login", data=json.dumps(logins), content_type="application/json"
     )
 
     assert response.status_code == 200
-    assert response.json["message"] == "User logged in"
+    assert response.json["message"] == f"You are logged in as {logins['username']}"
+
+
+def test_get_users(client):
+    response = client.get("/users")
+
+    assert response.status_code == 200
+    assert type(response.json) == dict()
+
+def test_get_user_by_id(client):
+    response = client.get("/users/1")
+
+    assert response.status_code == 200
+    assert type(response.json["user"]) == dict()

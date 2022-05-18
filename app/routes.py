@@ -70,7 +70,7 @@ def login():
             session["logged_in"] = True
             session["email"] = user.email
             session["username"] = user.username
-            return f"You are logged in as {user.username}", 201
+            return f"You are logged in as {user.username}", 200
         else:
             return "Username or Password Incorrect"
     return "user does not have an account"
