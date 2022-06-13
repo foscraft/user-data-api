@@ -34,7 +34,9 @@ def test_register(client):
     }
 
     response = client.post(
-        "/api/v1/register", data=json.dumps(test_data), content_type="application/json"
+        "/api/v1/register",
+        data=json.dumps(test_data),
+        content_type="application/json",
     )
     data = response.json.get("user")
     assert response.status_code == 201
@@ -53,7 +55,9 @@ def test_login(client):
     }
 
     response = client.post(
-        "/api/v1/register", data=json.dumps(data), content_type="application/json"
+        "/api/v1/register",
+        data=json.dumps(data),
+        content_type="application/json",
     )
 
     assert response.status_code == 201
@@ -70,7 +74,9 @@ def test_login(client):
     )
 
     assert response.status_code == 200
-    assert response.json["message"] == f"You are logged in as {data['username']}"
+    assert (
+        response.json["message"] == f"You are logged in as {data['username']}"
+    )
 
 
 def test_update_user_by_id(client):
@@ -84,7 +90,9 @@ def test_update_user_by_id(client):
     }
 
     response = client.post(
-        "/api/v1/register", data=json.dumps(data), content_type="application/json"
+        "/api/v1/register",
+        data=json.dumps(data),
+        content_type="application/json",
     )
 
     assert response.status_code == 201
@@ -125,7 +133,9 @@ def test_get_user_by_id(client):
     }
 
     response = client.post(
-        "/api/v1/register", data=json.dumps(data), content_type="application/json"
+        "/api/v1/register",
+        data=json.dumps(data),
+        content_type="application/json",
     )
     user_id = response.json["user"]["id"]
 

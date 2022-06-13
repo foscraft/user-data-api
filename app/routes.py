@@ -1,7 +1,4 @@
-import re
-from crypt import methods
-
-from flask import abort, jsonify, request, session
+from flask import abort, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import app, db
@@ -12,7 +9,9 @@ from app.models import User
 def register():
     data = request.json
 
-    hashed_password = generate_password_hash(data.get("password"), method="sha256")
+    hashed_password = generate_password_hash(
+        data.get("password"), method="sha256"
+    )
 
     user = User(
         first_name=data.get("first_name"),

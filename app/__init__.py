@@ -14,6 +14,6 @@ elif env == "production":
 
 db = SQLAlchemy(app)
 
-from app import routes
+from app import routes  # noqa: E402,F401
 
 db.create_all()
