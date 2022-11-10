@@ -3,6 +3,9 @@ from app import db
 
 
 class User(db.Model):
+    '''
+    Model collecting user information
+    '''
     __tablename__ = "users_table"
 
     id = db.Column(db.Integer, primary_key=True)

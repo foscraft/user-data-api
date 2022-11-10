@@ -7,6 +7,7 @@ from app.models import User
 
 @app.route("/api/v1/register", methods=["POST"])
 def register():
+  
     data = request.json
 
     hashed_password = generate_password_hash(
@@ -95,7 +96,6 @@ def logout():
 @app.route("/api/v1/users/<int:user_id>", methods=["PUT"])
 def update_user(user_id):
     data = request.json
-
     user = User.query.filter_by(id=user_id).first()
 
     if user:
